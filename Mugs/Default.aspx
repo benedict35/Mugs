@@ -18,7 +18,7 @@
             <br />
             <asp:Label ID="Label1" runat="server" Font-Bold="True" ForeColor="#CC66FF" Width="250px" Text="RETURN MESSAGE"></asp:Label>
             <br />
-            <asp:Label ID="return_message" runat="server" ForeColor="#CC66FF" Width="250px">f</asp:Label>
+            <asp:Label ID="return_message" runat="server" ForeColor="#CC66FF" Width="250px"></asp:Label>
         </div>
     </div>
     <div class="clearfix"></div>

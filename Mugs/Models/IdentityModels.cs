@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -30,9 +31,27 @@ namespace Mugs.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
+        }
+
+        public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+        {
+            protected override void Seed(ApplicationDbContext context)
+            {
+
+                context.Workers.Add(new HappyWorker() { Mugs = new Collection<Mug>() });
+                context.Workers.Add(new HardWorker() { Mugs = new Collection<Mug>() });
+                context.Workers.Add(new HopelessWorker() { Mugs = new Collection<Mug>() });
+                for (var i = 0; i < 5; i++)
+                {
+                    context.Mugs.Add(new Mug(){MugStatus = MugStatus.Available});    
+                }
+                base.Seed(context);
+            }
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -44,6 +63,8 @@ namespace Mugs.Models
                 .Map<HardWorker>(m => m.Requires("Type").HasValue("hard"))
                 .Map<HopelessWorker>(m => m.Requires("Type").HasValue("hopeless"));
         }
+
+        
 
         public DbSet<Worker> Workers { get; set; }
         public DbSet<Mug> Mugs { get; set; }
